@@ -4,9 +4,7 @@ phases:
  install:
     runtime-versions:
       nodejs: 10
-    commands:
-      - echo Installing Mocha...
-      - npm install -g mocha
+   
   pre_build:
     commands:
       - npm install
@@ -22,8 +20,10 @@ build:
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - node server.js
 post_build:
     commands:
+      - echo "hello"
       - echo Build completed on `date`
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:latest
