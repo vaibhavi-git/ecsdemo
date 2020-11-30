@@ -9,7 +9,7 @@ phases:
     commands:
       
       - echo Building the Node code...
-      - cd $usr/src/app
+     
       - npm run test
 artifacts:
   secondary-artifacts:
