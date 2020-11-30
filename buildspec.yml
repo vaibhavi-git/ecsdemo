@@ -1,31 +1,26 @@
-# Do not change version. This is the version of aws buildspec, not the version of your buldspec file.
 version: 0.2
+
 phases:
   install:
     runtime-versions:
+      golang: 1.13
       nodejs: 10
-    commands:
-      - npm init -y
-      - npm install express
- 
-  pre_build:
-    commands:
-      - echo Installing source NPM dependencies...
-     
   build:
     commands:
-      - echo Build started on `date`
-      - echo Compiling the Node.js code
-      - npm run server.js
-  post_build:
-    commands:
-      - echo Build completed on `date`
-      - node server.js
-# Include only the files required for your application to run.
+      - echo Building the Go code...
+      - cd $CODEBUILD_SRC_DIR/golang-app
+      - go build hello.go 
+      - echo Building the Node code...
+      - cd $usr/src/app
+      - npm run test
 artifacts:
-  files:
-    - server.js
-    - package-lock.json
-    - Dockerfile
-    - package.json
-    - node_modules/**/*
+  secondary-artifacts:
+    golang_artifacts:
+      base-directory: golang-app
+      files:
+        - hello
+    nodejs_artifacts:
+      base-directory: ecsdemo
+      files:
+        - server.js
+        - package.json
