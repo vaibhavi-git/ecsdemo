@@ -1,38 +1,29 @@
-# Don't change this version, this version is buildspec.yml file's version
+# Do not change version. This is the version of aws buildspec, not the version of your buldspec file.
 version: 0.2
 phases:
- install:
+  install:
     runtime-versions:
       nodejs: 10
-   
+    commands:
+      - echo Installing Mocha...
+      - npm install -g mocha
   pre_build:
     commands:
+      - echo Installing source NPM dependencies...
       - npm install
-      - echo Logging in to Amazon ECR...
-      - aws --version
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - REPOSITORY_URI=910605245441.dkr.ecr.us-east-1.amazonaws.com/sample-nodejs-app
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
-build:
+  build:
     commands:
       - echo Build started on `date`
-      - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
-      - node server.js
-post_build:
+      - echo Compiling the Node.js code
+      - npm run server.js
+  post_build:
     commands:
-      - echo "hello"
       - echo Build completed on `date`
-      - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo Writing image definitions file...
-      
-    
+# Include only the files required for your application to run.
 artifacts:
-  files: 
-  package-lock.json
-  package.json
-  server.js
+  files:
+    - server.js
+    - package-lock.json
+    - Dockerfile
+    - package.json
+    - node_modules/**/*
