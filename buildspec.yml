@@ -1,8 +1,15 @@
 # Don't change this version, this version is buildspec.yml file's version
 version: 0.2
 phases:
+ install:
+    runtime-versions:
+      nodejs: 10
+    commands:
+      - echo Installing Mocha...
+      - npm install -g mocha
   pre_build:
     commands:
+      - npm install
       - echo Logging in to Amazon ECR...
       - aws --version
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
@@ -22,7 +29,10 @@ post_build:
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
-      - printf '[{"name":"<Your Container Name>","imageUri":"%s"}]'    $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - cat imagedefinitions.json
+      
+    
 artifacts:
-  files: imagedefinitions.json
+  files: 
+  package-lock.json
+  package.json
+  server.js
