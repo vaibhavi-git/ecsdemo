@@ -10,7 +10,6 @@ phases:
       
       - echo Building the Node code...
      
-      - npm run test
 artifacts:
   secondary-artifacts:
    
@@ -19,3 +18,4 @@ artifacts:
       files:
         - server.js
         - package.json
+        - node_modules/**/*
