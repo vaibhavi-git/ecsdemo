@@ -3,24 +3,19 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      golang: 1.13
+     
       nodejs: 10
   build:
     commands:
-      - echo Building the Go code...
-      - cd $CODEBUILD_SRC_DIR/golang-app
-      - go build hello.go 
+      
       - echo Building the Node code...
       - cd $usr/src/app
       - npm run test
 artifacts:
   secondary-artifacts:
-    golang_artifacts:
-      base-directory: golang-app
-      files:
-        - hello
+   
     nodejs_artifacts:
-      base-directory: ecsdemo
+      base-directory: 
       files:
         - server.js
         - package.json
