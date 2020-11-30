@@ -5,12 +5,13 @@ phases:
     runtime-versions:
       nodejs: 10
     commands:
-      - echo Installing Mocha...
-      - npm install -g mocha
+      - npm init -y
+      - npm install express
+ 
   pre_build:
     commands:
       - echo Installing source NPM dependencies...
-      - npm install
+     
   build:
     commands:
       - echo Build started on `date`
@@ -19,6 +20,7 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
+      - node server.js
 # Include only the files required for your application to run.
 artifacts:
   files:
